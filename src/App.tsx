@@ -1,14 +1,20 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './App.css'
 import type { ExperimentSummary } from './types/experiment'
 
 
 function App() {
-const [experiments, setExperiments] = useState<ExperimentSummary[]>([
-  { id: 1, name: "Night Field Test", location: "Haifa", type: "Navigation", date: "2026-11-15T00:00:00", status: "Planned" },
-  { id: 2, name: "Radar Calibration", location: "Negev", type: "Radar", date: "2026-12-01T00:00:00", status: "InProgress" },
-])
+const [experiments, setExperiments] = useState<ExperimentSummary[]>([])
 
+useEffect(() => {
+  async function loadExperiments(): Promise<void> {
+    const response: Response = await fetch("http://localhost:5130/api/experiments")
+    const data: ExperimentSummary[] = await response.json()
+    setExperiments(data)
+  }
+
+  loadExperiments()}
+,[])
 
   return (
     <>
