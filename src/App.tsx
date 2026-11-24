@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 import type { ExperimentSummary } from './types/experiment'
+import ExperimentTable from './components/ExperimentTable'
 
 
 function App() {
@@ -42,11 +43,7 @@ function App() {
     <>
       <div>
         <h1> Experiments</h1>
-        <ul>
-          {experiments.map((ex) => (
-            <li key={ex.id}> {ex.name} </li>
-          ))}
-        </ul>
+        <ExperimentTable experiments={experiments}/>
       </div>
     </>
   )
