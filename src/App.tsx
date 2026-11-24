@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import './App.css'
 import type { ExperimentSummary } from './types/experiment'
 import ExperimentTable from './components/ExperimentTable'
+import { getExperiments } from './services/experimentsApi'
 
 
 function App() {
@@ -12,12 +13,7 @@ function App() {
   useEffect(() => {
     async function loadExperiments(): Promise<void> {
       try {
-        const response: Response = await fetch("http://localhost:5130/api/experiments")
-        if (!response.ok) {
-          throw new Error(`Server returned ${response.status}`)
-        }
-
-        const data: ExperimentSummary[] = await response.json()
+        const data: ExperimentSummary[] = await getExperiments()
         setExperiments(data)
       }
       catch (err) {
@@ -38,12 +34,13 @@ function App() {
   if (error) {
     return <p>{error}</p>
   }
+  const isEmpty: boolean = experiments.length === 0
 
   return (
     <>
       <div>
         <h1> Experiments</h1>
-        <ExperimentTable experiments={experiments}/>
+        {isEmpty ? (<p>No experiments found</p>) : (<ExperimentTable experiments={experiments}/>)}
       </div>
     </>
   )
