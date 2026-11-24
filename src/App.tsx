@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
 import './App.css'
-import type { ExperimentSummary } from './types/experiment'
 import ExperimentTable from './components/ExperimentTable'
-import { getExperiments } from './services/experimentsApi'
+import { getExperiments,createExperiment } from './services/experimentsApi'
+import type { ExperimentSummary, ExperimentInput } from './types/experiment'
+import ExperimentForm from './components/ExperimentForm'
 
 
 function App() {
@@ -36,10 +37,16 @@ function App() {
   }
   const isEmpty: boolean = experiments.length === 0
 
+  async function handleCreate(input: ExperimentInput): Promise<void> {
+    const created: ExperimentSummary = await createExperiment(input)
+    setExperiments(prev => [...prev, created])
+  }
+
   return (
     <>
       <div>
         <h1> Experiments</h1>
+        <ExperimentForm onSubmit={handleCreate} />
         {isEmpty ? (<p>No experiments found</p>) : (<ExperimentTable experiments={experiments}/>)}
       </div>
     </>
